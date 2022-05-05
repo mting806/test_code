@@ -22,11 +22,11 @@ class data_test(object):
     def __init__(self, data):
         self.data = data
 
-    @data_validator_class
+    @data_validator_func.validate
     def set_date(self, data):
         self.data = data
         return data
 
 a = data_test(15)
-a.set_date(2)
+a.set_date(20)
 print(a.data)
