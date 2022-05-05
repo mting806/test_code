@@ -1,7 +1,6 @@
 import pickle
 import shelve
 
-#pickle
 class test(object):
     def __init__(self, data):
         self.data = data
