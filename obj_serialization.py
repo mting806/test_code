@@ -28,9 +28,10 @@ del a
 
 b = pickle.load(open("pickle_test.pickle", "rb", pickle.HIGHEST_PROTOCOL))
 print(b.get_data())
+del b
 
 with shelve.open("shelf_test.shelf", "r", pickle.HIGHEST_PROTOCOL) as shelf:
-    for key in shelf.keys():
-        print(repr(key), repr(shelf[key]))
+#    for key in shelf.keys():
+#        print(repr(key), repr(shelf[key]))
     c = shelf["a"]
 print(c.get_data())
