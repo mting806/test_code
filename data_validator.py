@@ -1,12 +1,27 @@
 from schema import Schema
+from schema import SchemaError
+
+class DataValideErr(Exception):
+    def __init__(self, message: str, name: str = None) -> None:
+        self.name = name
+        self.message = message
+        super().__init__(message)
 
 class data_validator_func(object):
     @staticmethod
-    def validate(func):
+    def not_none(func):
         def wrapper(self, *args, **kwargs):
-            return Schema(lambda x: x>5).validate(func(self, *args, **kwargs))
+            try:
+                name = self.name
+                return Schema(lambda x: x>0).validate(func(self, *args, **kwargs))
+            except SchemaError as e:
+                raise DataValideErr("not_none")
         return wrapper
 
+    def unique(func):
+        def wrapper(self, *args, **kwargs):
+            return Schema(lambda x: x==0).validate(func(self, *args, **kwargs))
+        return wrapper
 
 class data_validator_class(object):
     def __init__(self, func):
@@ -21,8 +36,13 @@ class data_validator_class(object):
 class data_test(object):
     def __init__(self, data):
         self.data = data
+        self.name = "data_test"
 
-    @data_validator_func.validate
+    def __str__(self):
+        return str(self.__class__)
+
+    @data_validator_func.not_none
+    @data_validator_func.unique
     def set_date(self, data):
         self.data = data
         return data
