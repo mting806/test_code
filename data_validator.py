@@ -13,9 +13,11 @@ class data_validator_func(object):
         def wrapper(self, *args, **kwargs):
             try:
                 name = self.name
-                return Schema(lambda x: x>0).validate(func(self, *args, **kwargs))
+                return Schema(lambda x: x>5).validate(func(self, *args, **kwargs))
             except SchemaError as e:
                 raise DataValideErr("not_none")
+#            finally:
+#                return 8
         return wrapper
 
     def unique(func):
@@ -42,11 +44,16 @@ class data_test(object):
         return str(self.__class__)
 
     @data_validator_func.not_none
-    @data_validator_func.unique
+#    @data_validator_func.unique
     def set_date(self, data):
         self.data = data
         return data
 
 a = data_test(15)
-a.set_date(20)
-print(a.data)
+try:
+    a.set_date(3)
+    print(a.data)
+except DataValideErr as e:
+    print(e)
+    print(a.data)
+
